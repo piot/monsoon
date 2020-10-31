@@ -1,0 +1,14 @@
+depsversion = "0.0.0"
+
+name = "piot/monsoon"
+version = "0.0.0"
+
+
+[[dependencies]]
+name = 'piot/breathe'
+version = "*"
+
+
+[[dependencies]]
+name = 'piot/thunder'
+version = "*"
