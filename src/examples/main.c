@@ -52,7 +52,7 @@ void *g_breathe_init(int argc, const char *argv[], int width, int height)
 	while (1)
 	{
 		int decodedSamples = monsoonDecode(&self.monsoon, tempSamples, minimumSampleCount);
-		printf("decode: %d\n", decodedSamples);
+		//printf("decode: %d\n", decodedSamples);
 		if (decodedSamples <= 0)
 		{
 			break;
