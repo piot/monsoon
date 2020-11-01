@@ -4,11 +4,11 @@ name = "piot/monsoon"
 version = "0.0.0"
 
 
-[[dependencies]]
+[[development]]
 name = 'piot/breathe'
 version = "*"
 
 
-[[dependencies]]
+[[development]]
 name = 'piot/thunder'
 version = "*"
