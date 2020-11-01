@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <monsoon/monsoon.h>
 
@@ -20,8 +21,9 @@ void *g_breathe_init(int argc, const char *argv[], int width, int height)
 	FILE *f = fopen("sample.opus", "rb");
 	if (f == 0)
 	{
-		return;
+		return 0;
 	}
+
 	fseek(f, 0, SEEK_END);
 	long fsize = ftell(f);
 	fseek(f, 0, SEEK_SET);
@@ -30,24 +32,36 @@ void *g_breathe_init(int argc, const char *argv[], int width, int height)
 	fread(data, 1, fsize, f);
 	fclose(f);
 
+	FILE *of = fopen("sample.raw", "wb");
+	if (of == 0)
+	{
+		return 0;
+	}
+
 	int result = monsoonInit(&self.monsoon, 48000, data, fsize);
 	if (result < 0)
 	{
-		return;
+		return 0;
 	}
 	printf("init: %d\n", result);
 
-	int16_t tempSamples[5076 * 2];
+	int minimumSampleCount = monsoonMinimumSampleBufferSize(&self.monsoon);
+
+	int16_t *tempSamples = malloc(sizeof(int16_t) * 2 * minimumSampleCount);
 
 	while (1)
 	{
-		result = monsoonDecode(&self.monsoon, tempSamples, 5076 * 2);
-		printf("decode: %d\n", result);
-		if (result <= 0)
+		int decodedSamples = monsoonDecode(&self.monsoon, tempSamples, minimumSampleCount);
+		printf("decode: %d\n", decodedSamples);
+		if (decodedSamples <= 0)
 		{
-			return;
+			break;
 		}
+		fwrite(tempSamples, sizeof(int16_t) * 2, decodedSamples, of);
 	}
+
+	fclose(of);
+	free(tempSamples);
 
 	return &self;
 }
@@ -56,7 +70,7 @@ int g_breathe_draw(void *_self)
 {
 	(void)_self;
 
-	return 0;
+	return 1;
 }
 
 void g_breathe_close(void *app)
