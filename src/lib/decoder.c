@@ -35,3 +35,8 @@ int monsoonDecode(Monsoon *self, int16_t *sampleTarget, int sampleCount)
 
     return op_read(self->opusFile, sampleTarget, sampleCount, 0);
 }
+
+int monsoonRewind(struct Monsoon* self)
+{
+    return op_raw_seek(self->opusFile, 0);
+}
