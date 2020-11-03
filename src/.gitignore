@@ -1,3 +1,7 @@
+.idea/
+.vscode/
+sample.raw
+*.cbp
 CMakeFiles/
 CMakeCache.txt
 Makefile
