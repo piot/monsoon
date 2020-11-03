@@ -165,7 +165,7 @@ target_compile_options(monsoon PRIVATE -Wall -Wno-unused-variable ${sanitizers})
 
 if (NOT isDebug)
     message("optimize!")
-    target_compile_options(monsoon PRIVATE -O3 -flto)
+    target_compile_options(monsoon PRIVATE -O3) # -flto)
 endif()
 
 find_package (Vulkan 1.2 REQUIRED)
