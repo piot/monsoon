@@ -28,8 +28,8 @@ void *g_breathe_init(int argc, const char *argv[], int width, int height)
 	long fsize = ftell(f);
 	fseek(f, 0, SEEK_SET);
 
-	char *data = malloc(fsize);
-	fread(data, 1, fsize, f);
+	const uint8_t *data = malloc(fsize);
+	fread((void*)data, 1, fsize, f);
 	fclose(f);
 
 	FILE *of = fopen("sample.raw", "wb");

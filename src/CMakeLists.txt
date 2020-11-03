@@ -125,7 +125,7 @@ function(unixlike)
         "${deps}*/src/platform/posix/*.c"
         "${deps}*/src/platform/glfw/*.c"
         )
-        message("${deps_platform_src}")
+        message("DEPS ${deps_platform_src}")
 
         list(FILTER deps_platform_src EXCLUDE REGEX ".*breathe/src/platform/posix/.*" )                
 
@@ -138,15 +138,21 @@ if (OS_LINUX)
 elseif (OS_MACOS)
         message("MacOS detected!")
         unixlike()
+        file(GLOB_RECURSE deps_macos_src FOLLOW_SYMLINKS
+            "${deps}thunder/src/platform/ios/*.c"
+        )
+        list(APPEND deps_platform_src ${deps_macos_src})
 endif()
+
+
 
 
 add_executable(monsoon
         ${deps_src}
         ${lib_src}
         ${deps_platform_src}
-        ${deps}thunder/src/platform/sdl/sound_driver.c
-        ${deps}thunder/src/platform/sdl_common/sdl_sound_driver.c
+        #${deps}thunder/src/platform/sdl/sound_driver.c
+        #${deps}thunder/src/platform/sdl_common/sdl_sound_driver.c
         examples/main.c
         )
 
@@ -175,15 +181,19 @@ if (Vulkan_FOUND)
 endif (Vulkan_FOUND)
 find_package(glfw3 3.3 REQUIRED)
 
-# SDL2
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-target_link_libraries(monsoon ${SDL2_LIBRARIES})
-
+# Core Audio
+if (OS_MACOS)
+   find_library(COREAUDIO_LIBRARY CoreAudio)
+   find_library(COREFOUNDATION_LIBRARY CoreFoundation)
+   find_library(COREAUDIO_TOOLBOX_LIBRARY AudioToolbox)
+   message("hello ${COREAUDIO_TOOLBOX_LIBRARY}\n ${COREAUDIO_LIBRARY} ${COREFOUNDATION_LIBRARY}\n")
+   target_link_libraries(monsoon ${COREAUDIO_LIBRARY})
+   target_link_libraries(monsoon ${COREFOUNDATION_LIBRARY})
+   target_link_libraries(monsoon ${COREAUDIO_TOOLBOX_LIBRARY})
+endif(OS_MACOS)
 
 # Opus
 find_package(Opus REQUIRED)
-message("tjoho:${OPUS_INCLUDE_DIRS}")
 include_directories(${OPUS_INCLUDE_DIRS})
 include_directories("${OPUS_INCLUDE_DIRS}/opus")
 target_link_libraries(monsoon ${OPUS_LIBRARIES})
