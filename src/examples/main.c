@@ -4,75 +4,69 @@
 
 #include <monsoon/monsoon.h>
 
-typedef struct context
-{
-	Monsoon monsoon;
+typedef struct context {
+    Monsoon monsoon;
 } context;
 
 static context self;
 
-void *g_breathe_init(int argc, const char *argv[], int width, int height)
+void* g_breathe_init(int argc, const char* argv[], int width, int height)
 {
-	(void)argc;
-	(void)argv;
+    (void) argc;
+    (void) argv;
 
-	printf("monsoon\n");
+    printf("monsoon\n");
 
-	FILE *f = fopen("sample.opus", "rb");
-	if (f == 0)
-	{
-		return 0;
-	}
+    FILE* f = fopen("sample.opus", "rb");
+    if (f == 0) {
+        return 0;
+    }
 
-	fseek(f, 0, SEEK_END);
-	long fsize = ftell(f);
-	fseek(f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_END);
+    long fsize = ftell(f);
+    fseek(f, 0, SEEK_SET);
 
-	const uint8_t *data = malloc(fsize);
-	fread((void*)data, 1, fsize, f);
-	fclose(f);
+    const uint8_t* data = malloc(fsize);
+    fread((void*) data, 1, fsize, f);
+    fclose(f);
 
-	FILE *of = fopen("sample.raw", "wb");
-	if (of == 0)
-	{
-		return 0;
-	}
+    FILE* of = fopen("sample.raw", "wb");
+    if (of == 0) {
+        return 0;
+    }
 
-	int result = monsoonInit(&self.monsoon, 48000, data, fsize);
-	if (result < 0)
-	{
-		return 0;
-	}
-	printf("init: %d\n", result);
+    int result = monsoonInit(&self.monsoon, 48000, data, fsize);
+    if (result < 0) {
+        return 0;
+    }
+    printf("init: %d\n", result);
 
-	int minimumSampleCount = monsoonMinimumSampleBufferSize(&self.monsoon);
+    int minimumSampleCount = monsoonMinimumSampleBufferSize(&self.monsoon);
 
-	int16_t *tempSamples = malloc(sizeof(int16_t) * 2 * minimumSampleCount);
+    int16_t* tempSamples = malloc(sizeof(int16_t) * 2 * minimumSampleCount);
 
-	while (1)
-	{
-		int decodedSamples = monsoonDecode(&self.monsoon, tempSamples, minimumSampleCount);
-		//printf("decode: %d\n", decodedSamples);
-		if (decodedSamples <= 0)
-		{
-			break;
-		}
-		fwrite(tempSamples, sizeof(int16_t) * 2, decodedSamples, of);
-	}
+    while (1) {
+        int decodedSamples = monsoonDecode(&self.monsoon, tempSamples, minimumSampleCount);
+        // printf("decode: %d\n", decodedSamples);
+        if (decodedSamples <= 0) {
+            break;
+        }
+        fwrite(tempSamples, sizeof(int16_t) * 2, decodedSamples, of);
+    }
 
-	fclose(of);
-	free(tempSamples);
+    fclose(of);
+    free(tempSamples);
 
-	return &self;
+    return &self;
 }
 
-int g_breathe_draw(void *_self)
+int g_breathe_draw(void* _self)
 {
-	(void)_self;
+    (void) _self;
 
-	return 1;
+    return 1;
 }
 
-void g_breathe_close(void *app)
+void g_breathe_close(void* app)
 {
 }
