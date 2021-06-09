@@ -1,4 +1,4 @@
-#include <opus/opusfile.h>
+#include <opusfile.h>
 #include <stdint.h>
 
 typedef struct Monsoon {
