@@ -16,7 +16,13 @@ set(PLATFORM_LIB_DIR ${CMAKE_SOURCE_DIR}../external/${OS_NAME}/)
 
 target_link_libraries(monsoon PUBLIC clog)
 
-if (TORNADO_OS_MACOS)
-    target_link_libraries(monsoon PUBLIC ${PLATFORM_LIB_DIR}libopusfile.a
-            ${PLATFORM_LIB_DIR}libopus.a)
-endif ()
+if(TORNADO_OS_WINDOWS)
+  target_link_libraries(
+    monsoon PUBLIC ${PLATFORM_LIB_DIR}opusfile.lib ${PLATFORM_LIB_DIR}opus.lib
+                   ${PLATFORM_LIB_DIR}ogg.lib)
+elseif(TORNADO_OS_LINUX OR TORNADO_OS_MACOS)
+  target_link_libraries(monsoon PUBLIC ${PLATFORM_LIB_DIR}libopusfile.a
+                                       ${PLATFORM_LIB_DIR}libopus.a)
+else()
+  message(FATAL_ERROR "unknown platform")
+endif()
