@@ -39,7 +39,7 @@ int monsoonDecode(Monsoon* self, int16_t* sampleTarget, size_t sampleCount)
 
     int readSampleCount = op_read(self->opusFile, sampleTarget, (int) sampleCount, &listIndex);
 
-#if CONFIGURATION_DEBUG
+#if defined CONFIGURATION_DEBUG
     if (self->isFirstDecode) {
         const OpusHead* head = op_head(self->opusFile, listIndex);
         if (head->channel_count != 2) {
