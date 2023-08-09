@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Peter Bjorklund. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +14,7 @@ typedef struct context {
 
 static context self;
 
-void* g_breathe_init(int argc, const char* argv[], int width, int height)
+int main(int argc, const char* argv[])
 {
     (void) argc;
     (void) argv;
@@ -58,15 +62,4 @@ void* g_breathe_init(int argc, const char* argv[], int width, int height)
     free(tempSamples);
 
     return &self;
-}
-
-int g_breathe_draw(void* _self)
-{
-    (void) _self;
-
-    return 1;
-}
-
-void g_breathe_close(void* app)
-{
 }

@@ -3,11 +3,9 @@ depsversion = "0.0.0"
 name = "piot/monsoon"
 version = "0.0.0"
 
-
-[[development]]
-name = 'piot/breathe'
+[[dependencies]]
+name = 'piot/clog'
 version = "*"
-
 
 [[development]]
 name = 'piot/thunder'
