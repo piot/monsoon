@@ -2,6 +2,8 @@
  *  Copyright (c) Peter Bjorklund. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
+#include <clog/clog.h>
+#include <clog/console.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,16 +15,20 @@ typedef struct context {
 } context;
 
 static context self;
-
+clog_config g_clog;
+char g_clog_temp_str[CLOG_TEMP_STR_SIZE];
 int main(int argc, const char* argv[])
 {
+    g_clog.level = CLOG_TYPE_VERBOSE;
+    g_clog.log = clog_console;
     (void) argc;
     (void) argv;
 
-    printf("monsoon\n");
+    CLOG_INFO("monsoon")
 
     FILE* f = fopen("sample.opus", "rb");
     if (f == 0) {
+        CLOG_SOFT_ERROR("could not find sample.opus")
         return 0;
     }
 
@@ -36,14 +42,16 @@ int main(int argc, const char* argv[])
 
     FILE* of = fopen("sample.raw", "wb");
     if (of == 0) {
-        return 0;
+        CLOG_SOFT_ERROR("could not open sample.raw for writing")
+        return -1;
     }
 
     int result = monsoonInit(&self.monsoon, 48000, data, fsize);
     if (result < 0) {
-        return 0;
+        CLOG_SOFT_ERROR("monsoonInit() failed")
+        return -1;
     }
-    printf("init: %d\n", result);
+    CLOG_INFO("init: %d", result)
 
     int minimumSampleCount = monsoonMinimumSampleBufferSize(&self.monsoon);
 
@@ -61,5 +69,7 @@ int main(int argc, const char* argv[])
     fclose(of);
     free(tempSamples);
 
-    return &self;
+    CLOG_INFO("worked!")
+
+    return 0;
 }

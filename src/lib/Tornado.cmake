@@ -43,12 +43,16 @@ function(set_tornado targetName)
 
   if(APPLE)
     set_local_and_parent(OS_MACOS TRUE)
+    set_local_and_parent(OS_NAME macos)
   elseif(UNIX)
     set_local_and_parent(OS_LINUX TRUE)
+    set_local_and_parent(OS_NAME linux)
   elseif(WIN32)
     set_local_and_parent(OS_WINDOWS TRUE)
+    set_local_and_parent(OS_NAME windows)
   endif()
-
+  set_local_and_parent(CPU_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+  message("CPU: ${CPU_ARCHITECTURE}")
   # ----- Set Compile options depending on compiler
 
   if(COMPILER_CLANG)

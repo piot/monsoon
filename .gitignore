@@ -16,3 +16,11 @@ cmake_install.cmake
 Makefile
 src/lib/libthunder-audio-queue-services.a
 src/example/audio-test
+bin/build2
+bin/flac-1.4.3
+bin/libogg-1.3.5
+bin/libopusenc-0.2.1
+bin/opus-1.4
+bin/opus-tools-0.2
+bin/opusfile-0.12
+src/lib/libmonsoon.a
