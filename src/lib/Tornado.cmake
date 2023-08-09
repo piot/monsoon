@@ -51,8 +51,11 @@ function(set_tornado targetName)
     set_local_and_parent(OS_WINDOWS TRUE)
     set_local_and_parent(OS_NAME windows)
   endif()
-  set_local_and_parent(CPU_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+  string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} PROCESSOR)
+  set_local_and_parent(CPU_ARCHITECTURE ${PROCESSOR})
   message("CPU: ${CPU_ARCHITECTURE}")
+
+
   # ----- Set Compile options depending on compiler
 
   if(COMPILER_CLANG)

@@ -16,6 +16,10 @@ file(REAL_PATH ../external/${OS_NAME}/${CPU_ARCHITECTURE}/ PLATFORM_LIB_DIR)
 
 target_link_libraries(monsoon PUBLIC clog)
 
+if (COMPILER_CLANG AND OS_LINUX)
+    target_compile_options(monsoon PRIVATE Wno-reserved-macro-identifier)
+endif()
+
 if (OS_WINDOWS)
     target_link_libraries(
             monsoon PUBLIC ${PLATFORM_LIB_DIR}/opusfile.lib ${PLATFORM_LIB_DIR}/opus.lib
